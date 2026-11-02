@@ -1,129 +1,87 @@
-# OPP_-o-n-Th-nh-Duy-112947
-Bai tap mon Lap trinh huong doi tuong
-#include <iostream>
-#include <string>
+#include<bits/stdc++.h>
 using namespace std;
 
-class vehicle {
-private:
-    int vehicleID;
-    string vehicleType;
-    int entryTime;
-    int parkingDuration;
-    double parkingFee;
-    bool isOccupied = false;
+class phuong_tien {
+ private:
+     int ma_xe;
+     string loai_xe;
+     int gio_vao;
+     int tg_do;
 
-public:
-    vehicle() {
-        vehicleID = 0;
-        vehicleType = "";
-        entryTime = 0;
-        parkingDuration = 0;
-        parkingFee = 0;
-        isOccupied = false;
+ public:
+     phuong_tien();
+     phuong_tien(int ma, string loai, int gio, int tg);
+
+     int lay_ma_xe() const;
+     string lay_loai_xe() const;
+     double tinh_phi() const;
+     void hien_thi() const;
+};
+phuong_tien :: phuong_tien(){
+ ma_xe = 0;
+ loai_xe = "";
+ gio_vao = 0;
+ tg_do = 0;
+}
+phuong_tien :: phuong_tien(int ma, string loai, int gio, int tg){
+ ma_xe = ma;
+ loai_xe = loai;
+ gio_vao = gio;
+ tg_do = tg;
+}
+
+int phuong_tien :: lay_ma_xe() const {
+ return ma_xe;
+}
+
+string phuong_tien :: lay_loai_xe() const{
+ return loai_xe;
+}
+
+void phuong_tien :: hien_thi() const{
+ cout << "Ma xe la: " << ma_xe << endl;
+ cout << "Loai xe la: " << loai_xe << endl;
+ cout << "Gio xe vao la: " << gio_vao << endl;
+ cout << "Thoi gian do xe la: " << tg_do << endl;
+}
+
+double phuong_tien :: tinh_phi() const{
+ bool gio_cao_diem = ( gio_vao >=6 && gio_vao <10) || (gio_vao >= 15 && gio_vao < 19);
+ int phi_co_ban = 0;
+ if(loai_xe == "xe oto") phi_co_ban = 6;
+ else if(loai_xe == "xe may") phi_co_ban = 4;
+ else if(loai_xe == "xe dap") phi_co_ban = 2;
+ double phu_phi = 0.0;
+ if(gio_cao_diem){
+  phu_phi = 1.3;
+ }else{
+  phu_phi = 0.95;
+ }
+ double phi_do_xe = 0.0;
+ if(tg_do <= 2){
+        phi_do_xe = phi_co_ban * phu_phi * 25000 * tg_do;
+    } else {
+        double phi_trong_2h_dau = phi_co_ban * phu_phi * 25000 * 2;
+        double phi_tiep_theo = phi_co_ban * 0.9 * 25000 * (tg_do - 2);
+        phi_do_xe = phi_trong_2h_dau + phi_tiep_theo;
     }
+    return phi_do_xe;
+}
+class bai_xe {
+ private:
+     int ma_bai;
+     char kich_thuoc;
+     phuong_tien pt1, pt2, pt3;
+     bool co1, co2, co3;
 
-    vehicle(int id, string type, int time, int duration, double fee, bool occupied) {
-        vehicleID = id;
-        vehicleType = type;
-        entryTime = time;
-        parkingDuration = duration;
-        parkingFee = fee;
-        isOccupied = occupied;
-    }
+ public:
+     bai_xe();
+     bai_xe(int ma, char kt);
 
-    // Getter
-    int getvehicleID() {
-        return vehicleID;
-    }
-
-    string getvehicleType() {
-        return vehicleType;
-    }
-
-    int getentryTime() {
-        return entryTime;
-    }
-
-    int getparkingDuration() {
-        return parkingDuration;
-    }
-
-    double getparkingFee() {
-        return parkingFee;
-    }
-
-    bool getisOccupied() {
-        return isOccupied;
-    }
-
-    // Setter
-    void setvehicleID(int id) {
-        vehicleID = id;
-    }
-
-    void setvehicleType(string type) {
-        vehicleType = type;
-    }
-
-    void setentryTime(int time) {
-        entryTime = time;
-    }
-
-    void setparkingDuration(int duration) {
-        parkingDuration = duration;
-    }
-
-    void setparkingFee(double fee) {
-        parkingFee = fee;
-    }
-
-    void setisOccupied(bool occupied) {
-        isOccupied = occupied;
-    }
-
-    // Tinh phi do xe
-    void calculateFee() {
-        double gia = 0;
-
-        if (vehicleType == "Car" || vehicleType == "car") {
-            gia = 6;
-        }
-        else if (vehicleType == "Motorcycle" || vehicleType == "motorcycle") {
-            gia = 4;
-        }
-        else if (vehicleType == "Bicycle" || vehicleType == "bicycle") {
-            gia = 2;
-        }
-
-        parkingFee = 0;
-
-        for (int i = 1; i <= parkingDuration; i++) {
-            int gio = entryTime + i - 1;
-
-            if (i <= 2) {
-                if ((gio >= 6 && gio < 10) ||
-                    (gio >= 15 && gio < 19)) {
-                    parkingFee += gia * 1.3;
-                }
-                else {
-                    parkingFee += gia * 0.95;
-                }
-            }
-            else {
-                parkingFee += gia * 0.9;
-            }
-        }
-    }
-
-    // Hien thi thong tin xe
-    void display() {
-        cout << "\nMa xe: " << vehicleID;
-        cout << "\nLoai xe: " << vehicleType;
-        cout << "\nGio vao: " << entryTime;
-        cout << "\nThoi gian do: " << parkingDuration;
-        cout << "\nPhi do xe: " << parkingFee;
-        cout << "\nTrang thai: " << isOccupied;
-        cout << endl;
-    }
+     int lay_ma() const;
+     bool them(phuong_tien v);
+     bool xoa(int ma_xe);
+     bool chua(int ma_xe) const;
+     void hien_thi() const;
+     bool co_loai(string loai, int& dem, double& tong) const;
 };
